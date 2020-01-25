@@ -26,18 +26,23 @@ var clickX;
 var clickY;
 var oldX = x;
 var oldY = y;
-var data;
-var cities = {};
-var wormholes = {};
-var borders = {};
-var planets = {};
+var selX;
+var selY;
 var showborders = true;
-var selectedPlanet = "none";
+var selectedCity = "none";
 var c = document.getElementById("canvas");
 var f = document.getElementById("field");
 
 var mapImg = null;
 var cityImg = null;
+
+/* NAME  X  Y  SIZE COUNTRY */
+var cities = {
+	"Thalgur": [-340.2, 251.5, 3, "Hilwahr"],
+	"Nomgur": [-322.8, 278.6, 3, "Hilwahr"],
+	"Dhularum": [-214.6, 329.7, 18, "Hilwahr"],
+	"Nir Dor": [-175.1, 290.4, 4, "Hilwahr"],
+};
 
 window.onload = function() {
     var ctx = c.getContext("2d");
@@ -52,6 +57,8 @@ canvas.addEventListener('mousemove', function(evt) {
 	var mousePos = getMousePos(canvas, evt);
 	mouseX = mousePos.x - Math.round(canvas.width/2);
 	mouseY = canvas.height - (mousePos.y + Math.round(canvas.height/2));
+	selX = x+mouseX/size;
+	selY = y+mouseY/size;
 	if (mouseDown) {
 		//console.log(mouseX-clickX, mouseY-clickY);
 		x = oldX - ((mouseX-clickX) / size);
@@ -73,7 +80,7 @@ canvas.onmousedown = function(evt) {
 	var mousePos = getMousePos(canvas, evt);
 	clickX = mousePos.x - Math.round(canvas.width/2);
 	clickY = canvas.height - (mousePos.y + Math.round(canvas.height/2));
-	//console.log(mousePos);
+	console.log(Math.round(selX), Math.round(selY));
 	mouseDown = true;
 	selectedPlanet = "none";
 	update();
@@ -132,6 +139,12 @@ function distance(x1, y1, x2, y2) {
 
 function draw(x, y, size) {
 	var ctx = c.getContext("2d");
+
+	ctx.fillStyle = "#000000";
+	ctx.strokeStyle = "#101010";
+	ctx.font = "2.5px devinneSwash";
+	ctx.globalAlpha = 1;
+
     //ctx.imageSmoothingEnabled = false;
 	ctx.setTransform(1,0,0,1,0,0);
 	ctx.clearRect(0, 0, c.width, c.height);
@@ -139,10 +152,32 @@ function draw(x, y, size) {
 	ctx.scale(size, size);
 	//drawPoint(ctx, 0, 0, x, y, "none");
    	ctx.drawImage(mapImg, 0-x-(1024), 0+y-(768));
+
+   	for (i in cities) {
+   		city = cities[i];
+   		ctx.fillStyle = "#0000FF";
+		ctx.beginPath();
+		ctx.arc(city[0]-x, -city[1]+y, city[2], 0, 2 * Math.PI);
+		ctx.fill();
+
+		ctx.font = city[2] + "px devinneSwash";
+		ctx.fillStyle = "#404040";
+   		ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2)+(0.03*city[2]), -city[1]+y-(city[2]+2)+(0.03*city[2]));
+		ctx.fillStyle = "#000000";
+   		ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2), -city[1]+y-(city[2]+2));
+	}
+
+	ctx.globalAlpha = 0.8;
+
    	ctx.drawImage(cityImg, 0-x-(1024), 0+y-(768));
+
+	ctx.fillStyle = "#000000";
 	ctx.beginPath();
-	ctx.arc(0-x, 0+y, 2, 0, 2 * Math.PI);
+	ctx.arc(0, 0, 2, 0, 2 * Math.PI);
 	ctx.fill();
+
+	ctx.font = "2.5px devinneSwash";
+   	ctx.fillText((Math.round(x*10)/10) + ", " + (Math.round(y*10)/10), 5, 0);
 }
 
 function get(path, params, cache=true, responseType="text", async=true) {
