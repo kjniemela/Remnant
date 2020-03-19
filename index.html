@@ -8,6 +8,7 @@
 
 <img id="map" src="map.jpg", style="display: none;">
 <img id="city" src="cities.png", style="display: none;">
+<img id="factions" src="factions.png", style="display: none;">
 
 <fieldset onselectstart="return false" id="field" style="height: 80px; margin:0px; text-align: center; box-shadow: 0px 0px;">
 <legend><b>The Remnant</b></legend>
@@ -35,6 +36,7 @@ var f = document.getElementById("field");
 
 var mapImg = null;
 var cityImg = null;
+var factionsImg = null;
 
 /* NAME  X  Y  SIZE COUNTRY */
 var cities = {
@@ -42,12 +44,63 @@ var cities = {
 	"Nomgur": [-322.8, 278.6, 3, "Hilwahr"],
 	"Dhularum": [-214.6, 329.7, 18, "Hilwahr"],
 	"Nir Dor": [-175.1, 290.4, 4, "Hilwahr"],
+	"Nar Badhir": [116.6, 359.2, 4, "Hilwahr"],
+	"Didard": [-90, 187, 3, "Brolzo"],
+	"Chiggegh": [44.2, 245.3, 3, "Brolzo"],
+	"Quadgon": [38.5, 134.7, 3, "Brolzo"],
+	"Budgag": [14.8, 131.1, 3, "Brolzo"],
+	"Guldril": [10.2, 109.6, 7, "Brolzo"],
+	"Didard": [-90, 187, 3, "Brolzo"],
+	"Bhadh": [-58.8, 92.8, 10, "Brolzo"],
+	"Oghon": [-15.9, 36.1, 4, "Brolzo"],
+	"Zren Zru": [33.9, 32.7, 4, "Brolzo"],
+	"Quccazzaz": [-65, -54, 14, "Brolzo"],
+	"Zu Ighal": [-121.7, -53.9, 8, "Brolzo"],
+	"Edbrikh": [-216, 53.1, 4, "Brolzo"],
+	"Nidvagg": [-248.8, 19.8, 5, "Brolzo"],
+	"Afme Taesi": [-137.9, -153.6, 9, "Uyalon"],
+	"Ayfrion": [-154.2, -182.2, 4, "Uyalon"],
+	"Kilanor": [-182.3, -188.8, 8, "Uyalon"],
+	"Uinas": [-196.8, -175.2, 4, "Uyalon"],
+	"Selasera": [-226.5, -190, 17, "Uyalon"],
+	"Allsa": [-239.6, -217.9, 4, "Uyalon"],
+	"Lynlu": [-228.2, -234.9, 7, "Uyalon"],
+	"E'harius": [-177.8, -234.8, 13, "Uyalon"],
+	"Yllet": [-205, -268.5, 7, "Uyalon"],
+	"Silmah": [-179.2, -282.8, 3, "Uyalon"],
+	"Eysmel": [-252.3, -317, 8, "Uyalon"],
+	"Nyllat": [-306.4, -291.8, 5, "Uyalon"],
+	"Nehimel": [-332.2, -261.3, 4, "Uyalon"],
+	"Yaaldel": [-339.7, -227.1, 8, "Uyalon"],
+	"Jisame": [-377.9, -199, 3, "Uyalon"],
+	"Lilsa": [-317.2, -153.8, 4, "Uyalon"],
+	"Sheo Caelora": [-164.8, -327.4, 3, "Uyalon"],
+	"Lafe Alhora": [-365.1, -390.1, 4, "Uyalon"],
+	"Borgarsandr": [212.5, 61.9, 9, "Eskiholt"],
+	"Basvik": [98.4, -18.2, 10, "Eskiholt"],
+	"Faxaoss": [176, 23.9, 4, "Eskiholt"],
+	"Reykjaa": [136.3, -146.9, 3, "Eskiholt"],
+	"Norolendingafjoroungr": [100.4, -202.3, 4, "Eskiholt"],
+	"Raumsdalr": [18.2, -246.9, 4, "Eskiholt"],
+	"Mydalr": [28.2, -223.5, 3, "Eskiholt"],
+};
+
+bnames = [
+	"Kilanor",
+	"Uinas",
+	"Lynlu"
+]
+
+/* NAME  X  Y */
+var ships = {
+	"Eirtharlausir": [118, 349],
 };
 
 window.onload = function() {
     var ctx = c.getContext("2d");
     mapImg = document.getElementById("map");
     cityImg = document.getElementById("city");
+    factionsImg = document.getElementById("factions");
    	ctx.drawImage(mapImg, 10, 10);
 
 	resize();
@@ -63,8 +116,10 @@ canvas.addEventListener('mousemove', function(evt) {
 		//console.log(mouseX-clickX, mouseY-clickY);
 		x = oldX - ((mouseX-clickX) / size);
 		y = oldY - ((mouseY-clickY) / size);
-		draw(x, y, size);
+		//draw(x, y, size);
 	}
+
+	update();
 } );
 
 canvas.addEventListener('wheel', function(evt) {
@@ -152,24 +207,74 @@ function draw(x, y, size) {
 	ctx.scale(size, size);
 	//drawPoint(ctx, 0, 0, x, y, "none");
    	ctx.drawImage(mapImg, 0-x-(1024), 0+y-(768));
+   	if (showborders) {
+   		ctx.drawImage(factionsImg, 0-x-(1024), 0+y-(768));
+   	}
 
    	for (i in cities) {
    		city = cities[i];
-   		ctx.fillStyle = "#0000FF";
-		ctx.beginPath();
-		ctx.arc(city[0]-x, -city[1]+y, city[2], 0, 2 * Math.PI);
-		ctx.fill();
+   		var grd = ctx.createRadialGradient(city[0]-x, -city[1]+y, city[2]/3, city[0]-x, -city[1]+y, city[2]-1);
+		grd.addColorStop(0, "rgba(0, 0, 255, 1)");
+		grd.addColorStop(1, "rgba(0, 0, 255, 0)");
+   		ctx.fillStyle = grd;
 
-		ctx.font = city[2] + "px devinneSwash";
-		ctx.fillStyle = "#404040";
-   		ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2)+(0.03*city[2]), -city[1]+y-(city[2]+2)+(0.03*city[2]));
-		ctx.fillStyle = "#000000";
-   		ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2), -city[1]+y-(city[2]+2));
+   		if (bnames.includes(i)) {
+   			ym = -1.5
+   		} else {
+   			ym = 1
+   		}
+
+   		if (distance(selX, selY, city[0], city[1]) < city[2]) {
+   			ctx.globalAlpha = (distance(selX, selY, city[0], city[1]) / -city[2])+1.2;
+   			ctx.beginPath();
+   			ctx.arc(city[0]-x, -city[1]+y, city[2], 0, 2 * Math.PI);
+   			ctx.fill();
+   			if (!showborders) {
+   				ctx.font = city[2] + "px devinneSwash";
+				ctx.fillStyle = "#A0A0A0";
+	   			ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2)+(0.03*city[2]), -city[1]+y-((city[2]+2+(0.03*city[2]))*ym));
+				ctx.fillStyle = "#000000";
+	   			ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2), -city[1]+y-((city[2]+2)*ym));
+   			}
+   		}
+
+		ctx.globalAlpha = 1;
+		if (showborders) {
+			ctx.font = city[2] + "px devinneSwash";
+			ctx.fillStyle = "#A0A0A0";
+	   		ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2)+(0.03*city[2]), -city[1]+y-((city[2]+2+(0.03*city[2]))*ym));
+			ctx.fillStyle = "#000000";
+	   		ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2), -city[1]+y-((city[2]+2)*ym));
+	   	}
 	}
 
-	ctx.globalAlpha = 0.8;
+	ctx.globalAlpha = 0.9;
 
    	ctx.drawImage(cityImg, 0-x-(1024), 0+y-(768));
+
+	for (i in ships) {
+   		ship = ships[i];
+
+   		ctx.globalAlpha = 1;
+		ctx.fillStyle = "#000000";
+		ctx.beginPath();
+		ctx.arc(ship[0]-x, -ship[1]+y, 2, 0, 2 * Math.PI);
+		ctx.fill();
+
+		if (showborders) {
+			ctx.globalAlpha = 1;
+		} else if (distance(selX, selY, ship[0], ship[1]) < 5) {
+			ctx.globalAlpha = (distance(selX, selY, ship[0], ship[1]) / -5)+1.2;
+		} else {
+			ctx.globalAlpha = 0;
+		}
+
+		ctx.font = "3px devinneSwash";
+		ctx.fillStyle = "#A0A0A0";
+	   	ctx.fillText(i, ship[0]-x-(ctx.measureText(i).width/2)+(0.03*ship[2]), -ship[1]+y-(4.06*ym));
+		ctx.fillStyle = "#000000";
+	   	ctx.fillText(i, ship[0]-x-(ctx.measureText(i).width/2), -ship[1]+y-(4*ym));
+	}
 
 	ctx.fillStyle = "#000000";
 	ctx.beginPath();
@@ -177,6 +282,7 @@ function draw(x, y, size) {
 	ctx.fill();
 
 	ctx.font = "2.5px devinneSwash";
+	ctx.fillStyle = "#FF0000";
    	ctx.fillText((Math.round(x*10)/10) + ", " + (Math.round(y*10)/10), 5, 0);
 }
 
