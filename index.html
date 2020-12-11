@@ -40,32 +40,33 @@ var factionsImg = null;
 
 /* NAME  X  Y  SIZE COUNTRY */
 var cities = {
-	"Thalgur": [-340.2, 251.5, 3, "Hilwahr"],
-	"Nomgur": [-322.8, 278.6, 3, "Hilwahr"],
-	"Dhularum": [-214.6, 329.7, 18, "Hilwahr"],
-	"Nir Dor": [-175.1, 290.4, 4, "Hilwahr"],
-	"Nar Badhir": [116.6, 359.2, 4, "Hilwahr"],
+	"Thalgur": [-246, -146, 7, "Hilwahr"],
+	"Nomgur": [-213, -98, 8, "Hilwahr"],
+	"Dhularum": [-2, 5.5, 36, "Hilwahr"],
+	"Nir Dor": [89.1, -66.6, 10, "Hilwahr"],
+	"Nar Badhir": [640, 57, 12, "Hilwahr"],
 	"Didard": [-90, 187, 3, "Brolzo"],
-	"Chiggegh": [44.2, 245.3, 3, "Brolzo"],
-	"Quadgon": [38.5, 134.7, 3, "Brolzo"],
-	"Budgag": [14.8, 131.1, 3, "Brolzo"],
-	"Guldril": [10.2, 109.6, 7, "Brolzo"],
-	"Didard": [-90, 187, 3, "Brolzo"],
-	"Bhadh": [-58.8, 92.8, 10, "Brolzo"],
-	"Oghon": [-15.9, 36.1, 4, "Brolzo"],
-	"Zren Zru": [33.9, 32.7, 4, "Brolzo"],
-	"Quccazzaz": [-65, -54, 14, "Brolzo"],
-	"Zu Ighal": [-121.7, -53.9, 8, "Brolzo"],
-	"Edbrikh": [-216, 53.1, 4, "Brolzo"],
-	"Nidvagg": [-248.8, 19.8, 5, "Brolzo"],
-	"Afme Taesi": [-137.9, -153.6, 9, "Uyalon"],
-	"Ayfrion": [-154.2, -182.2, 4, "Uyalon"],
-	"Kilanor": [-182.3, -188.8, 8, "Uyalon"],
-	"Uinas": [-196.8, -175.2, 4, "Uyalon"],
-	"Selasera": [-226.5, -190, 17, "Uyalon"],
-	"Allsa": [-239.6, -217.9, 4, "Uyalon"],
-	"Lynlu": [-228.2, -234.9, 7, "Uyalon"],
-	"E'harius": [-177.8, -234.8, 13, "Uyalon"],
+	"Chiggegh": [494.8, -182.7, 12, "Brolzo"],
+	"Quadgon": [475.5, -393.1, 9, "Brolzo"],
+	"Budgag": [425.7, -399.2, 10, "Brolzo"],
+	"Guldril": [419.3, -437.4, 14, "Brolzo"],
+	"Didard": [247.3, -296.8, 11, "Brolzo"],
+	"Bhadh": [294.5, -474.3, 18, "Brolzo"],
+	"Shing Zhe": [403.8, -520, 5, "Brolzo"],
+	"Oghon": [362.6, -562.1, 11, "Brolzo"],
+	"Zren Zru": [466.9, -589.5, 16, "Brolzo"],
+	"Quccazzaz": [273, -747, 25, "Brolzo"],
+	"Zu Ighal": [168.9, -752.7, 17, "Brolzo"],
+	"Edbrikh": [-4.5, -533.1, 16, "Brolzo"],
+	"Nidvagg": [-71.7, -617, 17, "Brolzo"],
+	"Afme Taesi": [130.5, -935, 16, "Uyalon"],
+	"Ayfrion": [97.2, -987.1, 13, "Uyalon"],
+	"Kilanor": [46.9, -1013.3, 14, "Uyalon"],
+	"Uinas": [22.5, -983.1, 11, "Uyalon"],
+	"Selasera": [-42.6, -1008.8, 28, "Uyalon"],
+	"Allsa": [-52.7, -1056.8, 8, "Uyalon"],
+	"Lynlu": [-38.3, -1089.1, 19, "Uyalon"],
+	"E'harius": [53, -1098, 22, "Uyalon"],
 	"Yllet": [-205, -268.5, 7, "Uyalon"],
 	"Silmah": [-179.2, -282.8, 3, "Uyalon"],
 	"Eysmel": [-252.3, -317, 8, "Uyalon"],
@@ -250,7 +251,7 @@ function draw(x, y, size) {
 
 	ctx.globalAlpha = 0.9;
 
-   	ctx.drawImage(cityImg, 0-x-(1024), 0+y-(768));
+   	//ctx.drawImage(cityImg, 0-x-(1024), 0+y-(768));
 
 	for (i in ships) {
    		ship = ships[i];
