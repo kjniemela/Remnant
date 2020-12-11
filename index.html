@@ -9,17 +9,19 @@
 <img id="map" src="map.png" style="display: none;">
 <img id="city" src="cities.png", style="display: none;">
 <img id="factions" src="factions.png", style="display: none;">
+<img id="grid" src="grid.png", style="display: none;">
 
 <fieldset onselectstart="return false" id="field" style="height: 80px; margin:0px; text-align: center; box-shadow: 0px 0px;">
 <legend><b>The Remnant</b></legend>
 	<a id="borderbtn" onclick=toggleborders()>Hide Borders</a>
 	<a id="citybtn" onclick=togglecities()>Hide Cities</a>
+	<a id="gridbtn" onclick=togglegrid()>Show Grid</a>
 </fieldset>
 <canvas id="canvas" tabindex=0 width=400 height=400 style="margin:0px; border:0px solid #000000; left:0px; top:0px; cursor: auto;"></canvas></canvas>
 
 <script>
-var x = 0;
-var y = 0;
+var x = 300;
+var y = -475;
 var size = 1;
 var mouseDown = false;
 var mouseX;
@@ -32,6 +34,7 @@ var selX;
 var selY;
 var showborders = true;
 var showcities = true;
+var showgrid = false;
 var selectedCity = "none";
 var c = document.getElementById("canvas");
 var f = document.getElementById("field");
@@ -39,6 +42,7 @@ var f = document.getElementById("field");
 var mapImg = null;
 var cityImg = null;
 var factionsImg = null;
+var gridImg = null;
 
 /* NAME  X  Y  SIZE COUNTRY */
 var cities = {
@@ -110,6 +114,7 @@ window.onload = function() {
     mapImg = document.getElementById("map");
     cityImg = document.getElementById("city");
     factionsImg = document.getElementById("factions");
+    gridImg = document.getElementById("grid");
    	ctx.drawImage(mapImg, 10, 10);
 
 	resize();
@@ -197,6 +202,17 @@ function togglecities() {
 	update();
 }
 
+function togglegrid() {
+	showgrid = !showgrid;
+	b = document.getElementById("gridbtn");
+	if (showgrid) {
+		b.text = "Hide Grid"
+	} else {
+		b.text = "Show Grid"
+	}
+	update();
+}
+
 function resize() {
 	c.width = window.innerWidth;
 	c.height = window.innerHeight-80;
@@ -220,7 +236,7 @@ function draw(x, y, size) {
 	ctx.font = "2.5px devinneSwash";
 	ctx.globalAlpha = 1;
 
-    //ctx.imageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = false;
 	ctx.setTransform(1,0,0,1,0,0);
 	ctx.clearRect(0, 0, c.width, c.height);
 	ctx.translate(c.width/2, c.height/2);
@@ -272,6 +288,9 @@ function draw(x, y, size) {
 	ctx.globalAlpha = 0.9;
 
    	//ctx.drawImage(cityImg, 0-x-(1024), 0+y-(768));
+   	if (showgrid) {
+   		ctx.drawImage(gridImg, 0-x-(1024), 0+y-(768));
+   	}
 
 	for (i in ships) {
    		ship = ships[i];
