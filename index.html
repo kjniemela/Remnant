@@ -12,7 +12,8 @@
 
 <fieldset onselectstart="return false" id="field" style="height: 80px; margin:0px; text-align: center; box-shadow: 0px 0px;">
 <legend><b>The Remnant</b></legend>
-	<a id="borderbtn" onclick=toggleborders()>Hide Labels</a>
+	<a id="borderbtn" onclick=toggleborders()>Hide Borders</a>
+	<a id="citybtn" onclick=togglecities()>Hide Cities</a>
 </fieldset>
 <canvas id="canvas" tabindex=0 width=400 height=400 style="margin:0px; border:0px solid #000000; left:0px; top:0px; cursor: auto;"></canvas></canvas>
 
@@ -30,6 +31,7 @@ var oldY = y;
 var selX;
 var selY;
 var showborders = true;
+var showcities = true;
 var selectedCity = "none";
 var c = document.getElementById("canvas");
 var f = document.getElementById("field");
@@ -177,9 +179,20 @@ function toggleborders() {
 	showborders = !showborders;
 	b = document.getElementById("borderbtn");
 	if (showborders) {
-		b.text = "Hide Labels"
+		b.text = "Hide Borders"
 	} else {
-		b.text = "Show Labels"
+		b.text = "Show Borders"
+	}
+	update();
+}
+
+function togglecities() {
+	showcities = !showcities;
+	b = document.getElementById("citybtn");
+	if (showcities) {
+		b.text = "Hide Cities"
+	} else {
+		b.text = "Show Cities"
 	}
 	update();
 }
@@ -236,7 +249,7 @@ function draw(x, y, size) {
    			ctx.beginPath();
    			ctx.arc(city[0]-x, -city[1]+y, city[2], 0, 2 * Math.PI);
    			ctx.fill();
-   			if (!showborders) {
+   			if (!showcities) {
    				ctx.globalAlpha = 1;
    				ctx.font = city[2] + "px devinneSwash";
 				ctx.fillStyle = "#A0A0A0";
@@ -247,7 +260,7 @@ function draw(x, y, size) {
    		}
 
 		ctx.globalAlpha = 1;
-		if (showborders) {
+		if (showcities) {
 			ctx.font = city[2] + "px devinneSwash";
 			ctx.fillStyle = "#A0A0A0";
 	   		ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2)+(0.03*city[2]), -city[1]+y-((city[2]+2+(0.03*city[2]))*ym));
