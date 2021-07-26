@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/Remnant/style.css">
+<title>The Remnant</title>
+</head>
+<body style="margin:0px; overflow: hidden; font-family: devinneSwash;" unselectable="on">
+
+<img id="map" src="map.png" style="display: none;">
+<img id="city" src="cities.png", style="display: none;">
+<img id="factions" src="factions.png", style="display: none;">
+<img id="grid" src="grid.png", style="display: none;">
+
+<fieldset onselectstart="return false" id="field" style="height: 100px; margin:0px; text-align: center; box-shadow: 0px 0px;">
+<legend><b>The Remnant</b></legend>
+	<a class="btn" href="/Remnant">Home</a>
+	<a class="btn" id="borderbtn" onclick=toggleborders()>Hide Borders</a>
+	<a class="btn" id="citybtn" onclick=togglecities()>Hide Cities</a>
+	<a class="btn" id="gridbtn" onclick=togglegrid()>Show Grid</a>
+</fieldset>
+<canvas id="canvas" tabindex=0 width=400 height=400 style="margin:0px; border:0px solid #000000; left:0px; top:0px; cursor: auto;"></canvas></canvas>
+
+<script>
+var x = 300;
+var y = -475;
+var size = 1;
+var mouseDown = false;
+var mouseX;
+var mouseY;
+var clickX;
+var clickY;
+var oldX = x;
+var oldY = y;
+var selX;
+var selY;
+var showborders = true;
+var showcities = true;
+var showgrid = false;
+var selectedCity = "none";
+var c = document.getElementById("canvas");
+var f = document.getElementById("field");
+
+var mapImg = null;
+var cityImg = null;
+var factionsImg = null;
+var gridImg = null;
+
+/* NAME  X  Y  SIZE COUNTRY */
+var cities = {
+	"Thalgur": [-246, -146, 7, "Hilwahr"],
+	"Nomgur": [-213, -98, 8, "Hilwahr"],
+	"Dhularum": [-2, 5.5, 36, "Hilwahr"],
+	"Nir Dor": [89.1, -66.6, 10, "Hilwahr"],
+	"Nar Badhir": [640, 57, 12, "Hilwahr"],
+	"Didard": [-90, 187, 3, "Brolzo"],
+	"Chiggegh": [494.8, -182.7, 12, "Brolzo"],
+	"Quadgon": [475.5, -393.1, 9, "Brolzo"],
+	"Budgag": [425.7, -399.2, 10, "Brolzo"],
+	"Guldril": [419.3, -437.4, 14, "Brolzo"],
+	"Didard": [247.3, -296.8, 11, "Brolzo"],
+	"Bhadh": [294.5, -474.3, 18, "Brolzo"],
+	"Shing Zhe": [403.8, -520, 8, "Brolzo"],
+	"Oghon": [362.6, -562.1, 11, "Brolzo"],
+	"Zren Zru": [466.9, -589.5, 16, "Brolzo"],
+	"Quccazzaz": [273, -747, 25, "Brolzo"],
+	"Zu Ighal": [168.9, -752.7, 17, "Brolzo"],
+	"Edbrikh": [-4.5, -533.1, 16, "Brolzo"],
+	"Nidvagg": [-71.7, -617, 17, "Brolzo"],
+	"Afme Taesi": [130.5, -935, 16, "Uyalon"],
+	"Ayfrion": [97.2, -987.1, 13, "Uyalon"],
+	"Kilanor": [46.9, -1013.3, 14, "Uyalon"],
+	"Uinas": [22.5, -983.1, 11, "Uyalon"],
+	"Selasera": [-42.6, -1008.8, 28, "Uyalon"],
+	"Allsa": [-52.7, -1056.8, 8, "Uyalon"],
+	"Lynlu": [-38.3, -1089.1, 19, "Uyalon"],
+	"E'harius": [53, -1098, 22, "Uyalon"],
+	"Yllet": [5.2, -1155.5, 10, "Uyalon"],
+	"Silmah": [50, -1183, 9, "Uyalon"],
+	"Eysmel": [-86.5, -1245.6, 13, "Uyalon"],
+	"Nyllat": [-176.9, -1194.5, 11, "Uyalon"],
+	"Nehimel": [-235, -1138.6, 12, "Uyalon"],
+	"Yaaldel": [-250.2, -1073, 15, "Uyalon"],
+	"Jisame": [-320, -1018.7, 11, "Uyalon"],
+	"Lilsa": [-200, -932.5, 10, "Uyalon"],
+	"Sheo Caelora": [70, -1266.6, 8, "Uyalon"],
+	"Lafe Alhora": [-298.7, -1380.9, 9, "Uyalon"],
+	"Borgarsandr": [819, -538.7, 19, "Eskiholt"],
+	"Basvik": [587.6, -691.4, 18, "Eskiholt"],
+	"Faxaoss": [729.7, -647.1, 10, "Eskiholt"],
+	"Reykjaa": [656.2, -938.1, 10, "Eskiholt"],
+	"Norolendingafjoroungr": [577.2, -1045.8, 10, "Eskiholt"],
+	"Raumsdalr": [426.9, -1125, 12, "Eskiholt"],
+	"Mydalr": [444.4, -1076.8, 10, "Eskiholt"],
+};
+
+bnames = [
+	"Kilanor",
+	"Uinas",
+	"Lynlu",
+	"Jisame",
+	"Reykjaa"
+]
+
+/* NAME  X  Y */
+var ships = {
+	"Eir\u00F0arlausir": [570, -333],
+	"Voldugr": [675, -365],
+	"Morgunstjarna": [651, -468],
+	"Xu\u0300nsu\u0300": [515, -411],
+	"Osmatrach": [441, -443],
+};
+
+window.onload = function() {
+    var ctx = c.getContext("2d");
+    mapImg = document.getElementById("map");
+    cityImg = document.getElementById("city");
+    factionsImg = document.getElementById("factions");
+    gridImg = document.getElementById("grid");
+   	ctx.drawImage(mapImg, 10, 10);
+
+	resize();
+};
+
+canvas.addEventListener('mousemove', function(evt) {
+	var mousePos = getMousePos(canvas, evt);
+	mouseX = mousePos.x - Math.round(canvas.width/2);
+	mouseY = canvas.height - (mousePos.y + Math.round(canvas.height/2));
+	selX = x+mouseX/size;
+	selY = y+mouseY/size;
+	if (mouseDown) {
+		//console.log(mouseX-clickX, mouseY-clickY);
+		x = oldX - ((mouseX-clickX) / size);
+		y = oldY - ((mouseY-clickY) / size);
+		//draw(x, y, size);
+	}
+
+	update();
+} );
+
+canvas.addEventListener('wheel', function(evt) {
+	if (evt.deltaY>0) {
+		size /= 1.5;
+	} else {
+		size *= 1.5;
+	}
+	update();
+} );
+
+canvas.onmousedown = function(evt) {
+	var mousePos = getMousePos(canvas, evt);
+	clickX = mousePos.x - Math.round(canvas.width/2);
+	clickY = canvas.height - (mousePos.y + Math.round(canvas.height/2));
+	console.log(Math.round(selX), Math.round(selY));
+	mouseDown = true;
+	selectedPlanet = "none";
+	update();
+}
+canvas.onmouseup = function(evt) {
+	var mousePos = getMousePos(canvas, evt);
+	mouseDown = false;
+	oldX = x;
+	oldY = y;
+}
+
+/*canvas.onclick = function() {
+	var mousePos = getMousePos(canvas, evt);
+	clickX = mousePos.x - Math.round(canvas.width/2);
+	clickY = canvas.height - (mousePos.y + Math.round(canvas.height/2));
+	console.log(clickX, clickY)
+}*/
+
+window.addEventListener("resize", resize);
+
+function getMousePos( canvas, evt ) {
+    var rect = canvas.getBoundingClientRect();
+	pos = {
+        x: Math.floor( ( evt.clientX - rect.left ) / ( rect.right - rect.left ) * canvas.width ),
+        y: Math.floor( ( evt.clientY - rect.top ) / ( rect.bottom - rect.top ) * canvas.height )
+    }
+	//console.log(pos)
+    return pos;
+}
+
+function toggleborders() {
+	showborders = !showborders;
+	b = document.getElementById("borderbtn");
+	if (showborders) {
+		b.text = "Hide Borders"
+	} else {
+		b.text = "Show Borders"
+	}
+	update();
+}
+
+function togglecities() {
+	showcities = !showcities;
+	b = document.getElementById("citybtn");
+	if (showcities) {
+		b.text = "Hide Cities"
+	} else {
+		b.text = "Show Cities"
+	}
+	update();
+}
+
+function togglegrid() {
+	showgrid = !showgrid;
+	b = document.getElementById("gridbtn");
+	if (showgrid) {
+		b.text = "Hide Grid"
+	} else {
+		b.text = "Show Grid"
+	}
+	update();
+}
+
+function resize() {
+	c.width = window.innerWidth;
+	c.height = window.innerHeight-80;
+	//f.width = window.innerWidth+10;
+	draw(x, y, size);
+}
+
+function update() {
+	draw(x, y, size);
+}
+
+function distance(x1, y1, x2, y2) {
+	return Math.sqrt((x2-x1)**2 + (y2-y1)**2)
+}
+
+function draw(x, y, size) {
+	var ctx = c.getContext("2d");
+
+	ctx.fillStyle = "#000000";
+	ctx.strokeStyle = "#101010";
+	ctx.font = "2.5px devinneSwash";
+	ctx.globalAlpha = 1;
+
+	ctx.imageSmoothingEnabled = false;
+	ctx.setTransform(1,0,0,1,0,0);
+	ctx.clearRect(0, 0, c.width, c.height);
+	ctx.translate(c.width/2, c.height/2);
+	ctx.scale(size, size);
+	//drawPoint(ctx, 0, 0, x, y, "none");
+   	ctx.drawImage(mapImg, 0-x-(1024), 0+y-(768));
+   	if (showborders) {
+   		ctx.drawImage(factionsImg, 0-x-(1024), 0+y-(768));
+   	}
+   	if (showgrid) {
+   		ctx.drawImage(gridImg, 0-x-(1024), 0+y-(768));
+   	}
+
+   	for (i in cities) {
+   		city = cities[i];
+   		var grd = ctx.createRadialGradient(city[0]-x, -city[1]+y, city[2]/3, city[0]-x, -city[1]+y, city[2]-1);
+		grd.addColorStop(0, "rgba(0, 0, 255, 1)");
+		grd.addColorStop(1, "rgba(0, 0, 255, 0)");
+   		ctx.fillStyle = grd;
+
+   		if (bnames.includes(i)) {
+   			ym = -1.5
+   		} else {
+   			ym = 1
+   		}
+
+   		if (distance(selX, selY, city[0], city[1]) < city[2]) {
+   			ctx.globalAlpha = (distance(selX, selY, city[0], city[1]) / -city[2])+1.2;
+   			ctx.beginPath();
+   			ctx.arc(city[0]-x, -city[1]+y, city[2], 0, 2 * Math.PI);
+   			ctx.fill();
+   			if (!showcities) {
+   				ctx.globalAlpha = 1;
+   				ctx.font = city[2] + "px devinneSwash";
+				ctx.fillStyle = "#A0A0A0";
+	   			ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2)+(0.03*city[2]), -city[1]+y-((city[2]+2+(0.03*city[2]))*ym));
+				ctx.fillStyle = "#000000";
+	   			ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2), -city[1]+y-((city[2]+2)*ym));
+   			}
+   		}
+
+		ctx.globalAlpha = 1;
+		if (showcities) {
+			ctx.font = city[2] + "px devinneSwash";
+			ctx.fillStyle = "#A0A0A0";
+	   		ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2)+(0.03*city[2]), -city[1]+y-((city[2]+2+(0.03*city[2]))*ym));
+			ctx.fillStyle = "#000000";
+	   		ctx.fillText(i, city[0]-x-(ctx.measureText(i).width/2), -city[1]+y-((city[2]+2)*ym));
+	   	}
+	}
+
+	ctx.globalAlpha = 0.9;
+
+   	//ctx.drawImage(cityImg, 0-x-(1024), 0+y-(768));
+
+	for (i in ships) {
+   		ship = ships[i];
+
+   		ctx.globalAlpha = 1;
+		ctx.fillStyle = "#000000";
+		ctx.beginPath();
+		ctx.arc(ship[0]-x, -ship[1]+y, 2, 0, 2 * Math.PI);
+		ctx.fill();
+
+		if (showborders) {
+			ctx.globalAlpha = 1;
+		} else if (distance(selX, selY, ship[0], ship[1]) < 5) {
+			ctx.globalAlpha = (distance(selX, selY, ship[0], ship[1]) / -5)+1.2;
+		} else {
+			ctx.globalAlpha = 0;
+		}
+
+		ctx.font = "3px devinneSwash";
+		ctx.fillStyle = "#A0A0A0";
+	   	ctx.fillText(i, ship[0]-x-(ctx.measureText(i).width/2)+(0.03*ship[2]), -ship[1]+y-(4.06*ym));
+		ctx.fillStyle = "#000000";
+	   	ctx.fillText(i, ship[0]-x-(ctx.measureText(i).width/2), -ship[1]+y-(4*ym));
+	}
+
+	ctx.fillStyle = "#000000";
+	ctx.beginPath();
+	ctx.arc(0, 0, 2, 0, 2 * Math.PI);
+	ctx.fill();
+
+	ctx.font = "2.5px devinneSwash";
+	ctx.fillStyle = "#FF0000";
+   	ctx.fillText((Math.round(x*10)/10) + ", " + (Math.round(y*10)/10), 5, 0);
+}
+
+function get(path, params, cache=true, responseType="text", async=true) {
+	//console.log(path, params, cache, responseType, async);
+    var xhttp = new XMLHttpRequest();
+	if (cache) {
+		txt = ['t=' + Math.random().toString()];
+	}
+	else {
+		txt = [];
+	}
+	for (i in params) {
+		txt.push(i + '=' + params[i]);
+	}
+	if (async) {
+	data = "wait";
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				data = this.response;
+				//console.log(data);
+			}
+		};
+	}
+	txt = "?" + txt.join('&');
+	xhttp.open("GET", path + txt, async);
+	if (async) {xhttp.responseType = responseType;}
+	//xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhttp.send();
+	if (!async) {return xhttp.responseText;}
+}
+
+//by Juan Mendes
+function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+  if (typeof stroke === 'undefined') {
+    stroke = true;
+  }
+  if (typeof radius === 'undefined') {
+    radius = 5;
+  }
+  if (typeof radius === 'number') {
+    radius = {tl: radius, tr: radius, br: radius, bl: radius};
+  } else {
+    var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+    for (var side in defaultRadius) {
+      radius[side] = radius[side] || defaultRadius[side];
+    }
+  }
+  ctx.beginPath();
+  ctx.moveTo(x + radius.tl, y);
+  ctx.lineTo(x + width - radius.tr, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+  ctx.lineTo(x + width, y + height - radius.br);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+  ctx.lineTo(x + radius.bl, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+  ctx.lineTo(x, y + radius.tl);
+  ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+  ctx.closePath();
+  if (fill) {
+    ctx.fill();
+  }
+  if (stroke) {
+    ctx.stroke();
+  }
+
+}
+</script>
+
+
+</body>
+</html>
