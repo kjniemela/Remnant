@@ -40,7 +40,13 @@ a.sllnk {
     font-size: 27px;
 }
 
-body {background-color: #999999; margin: 0px;}
+body {
+    background: #918981;
+    background: -moz-linear-gradient(top,#918981 0%,#9e9994 3%,#c6c3be 10%);
+    background: -webkit-linear-gradient(top,#918981 0%,#9e9994 3%,#c6c3be 10%);
+    background: linear-gradient(to bottom,#918981 0%,#9e9994 3%,#c6c3be 10%);
+    margin: 0px;
+}
 .page {
     margin: 5px 5%;
     padding: 5px 2%;
