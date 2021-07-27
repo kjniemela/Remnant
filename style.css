@@ -82,10 +82,10 @@ a.booklink, a.booklink:link, a.booklink:visited {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 20px;
+    font-size: 1.5vw;
     width: 20%;
     padding-top: 11%;
-    padding-bottom: 16%;
+    padding-bottom: 9%;
     border-style: outset;
     border-width: 2px;
     border-color: gray;
@@ -95,9 +95,11 @@ a.booklink, a.booklink:link, a.booklink:visited {
     box-shadow: 1px 1px rgb(10, 10, 10);
     transition: color 0.5s, background-image 0.5s, padding 0.5s;
 }
+a.booklink p {visibility: hidden;}
+a.booklink:hover p {visibility: visible;}
 a.booklink:hover, a.booklink:active {
     padding-top: 2%;
-    padding-bottom: 25%;
+    padding-bottom: 18%;
     color: #000000;
     background-image: url("page.jpg");
     cursor: pointer;
@@ -119,6 +121,17 @@ fieldset {
 ul {
 	 text-align: left;
 	 font-size: 20px;"
+}
+
+th {
+    text-align: center;
+    font-size: 22px;
+}
+
+
+td {
+    text-align: center;
+    font-size: 18px;
 }
 
 h2 {
