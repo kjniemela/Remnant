@@ -12,11 +12,14 @@
 
 </style>
 </head>
-<body style="margin:0px; font-family: devinneSwash;" unselectable="on">
+<body id="body" style="margin:0px; font-family: devinneSwash;" unselectable="on">
 
 <div class="menubar">
 	<a class="btn" href="/Remnant" style="float: left;">Home</a>
 	<a class="btn" href="/Remnant/Map" style="float: left;">Full Map</a>
+</div>
+<div class="page">
+	<center><h1 style="font-size: 3vw;">Encyclopedia</h1></center>
 </div>
 <div style="height: 500px;">
 <div class="page" style="width: 49.5%; height: 100%; float: left; margin-right: 0.5%;">
@@ -193,6 +196,13 @@ canvas.addEventListener('mousemove', function(evt) {
 	}
 
 	update();
+} );
+
+canvas.addEventListener('mouseenter', function(evt) {
+	document.getElementById("body").style["overflow"] = "hidden";
+} )
+canvas.addEventListener('mouseleave', function(evt) {
+	document.getElementById("body").style["overflow"] = "";
 } );
 
 canvas.addEventListener('wheel', function(evt) {
