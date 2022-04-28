@@ -1,12 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const port = 3002;
+
+const PORT = 3002;
+const ADDR_PREFIX = '/remnant';
 
 const path = require('path');
 app.use(bodyParser.json());
-app.use('/remnant', express.static(path.join(__dirname, 'dist/')));
+app.use(`${ADDR_PREFIX}/`, express.static(path.join(__dirname, 'archive/')));
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Example app listening at http://localhost:${PORT}`);
 });
