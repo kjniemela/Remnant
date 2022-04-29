@@ -1,12 +1,15 @@
+//- helper functions
+- const capitalize = (str) => str[0].toUpperCase() + str.substr(1,str.length-1);
+
 doctype html
 html(lang='en')
   head
     title Remnants
-    link(rel='stylesheet' href='assets/styles.css')
+    link(rel='stylesheet' href='/remnant/assets/styles.css')
   body
     .navbar
-      a.btn(href='/remnant/archive/Map') Full Map
       block buttons
+      a.btn(href='/remnant/archive/Map') Full Map
 
     .page
       block content
