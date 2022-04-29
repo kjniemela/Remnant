@@ -19,7 +19,8 @@
   "homepage": "https://github.com/kjniemela/Remnant#readme",
   "dependencies": {
     "express": "^4.18.0",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

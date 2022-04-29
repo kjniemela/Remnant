@@ -1,0 +1,34 @@
+extends layout.pug
+
+mixin bookBtn(title, dst)
+  a.bookBtn( href=dst )
+    .bookText
+      b= title
+      if block
+        block
+      else
+        p Error: Missing desc.
+
+block content
+  .container.header
+    h1 The Remnants
+  .container( style={ width: '100%' } )
+    .bookContainer
+      +bookBtn('World Atlas', '/remnant/atlas')
+        p( style={'white-space': 'pre-wrap'} )
+          |
+          | The lands of this world.
+          | Mountains, Rivers, Valleys,
+          | Cities and Landmarks.
+      +bookBtn('Encyclopedia', '/remnant/encyclopedia')
+        p( style={'white-space': 'pre-wrap'} )
+          |
+          | Characters and their Actions,
+          | Wars and World Events,
+          | Magics and Politics.
+      +bookBtn('Narrative', '/remnant/narrative')
+        p( style={'white-space': 'pre-wrap'} )
+          |
+          | The Tales of the World,
+          | Plots and Character Arcs,
+          | Books and Short Stories.
