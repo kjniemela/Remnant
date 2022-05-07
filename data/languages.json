@@ -1,0 +1,20 @@
+{
+  "brolzoni": {
+    "name": "Brolzoni"
+  },
+  "eskiholti": {
+    "name": "Eskiholti"
+  },
+  "dwarvish": {
+    "name": "Dwarvish"
+  },
+  "orcish": {
+    "name": "Orcish"
+  },
+  "northern_sylvan": {
+    "name": "Northern Sylvan"
+  },
+  "southern_sylvan": {
+    "name": "Southern Sylvan"
+  }
+}

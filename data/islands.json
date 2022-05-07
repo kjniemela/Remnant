@@ -1,0 +1,60 @@
+{
+  "chiggegh": {
+    "name": "Chiggegh Island",
+    "cities": [
+      "chiggegh"
+    ]
+  },
+  "midh": {
+    "name": "Midh Island",
+    "cities": []
+  },
+  "didard": {
+    "name": "Didard Island",
+    "cities": [
+      "didard"
+    ]
+  },
+  "illgre": {
+    "name": "Illgre Island",
+    "cities": []
+  },
+  "agkhor": {
+    "name": "Ag-khor Island",
+    "cities": [
+      "quadgon",
+      "budgag",
+      "khidagh_khen",
+      "guldril"
+    ]
+  },
+  "kog": {
+    "name": "Kog Island",
+    "cities": []
+  },
+  "udh": {
+    "name": "Udh Island",
+    "cities": []
+  },
+  "verrog": {
+    "name": "Verrog Island",
+    "cities": [
+      "edbrikh",
+      "nidvagg"
+    ]
+  },
+  "nodard": {
+    "name": "Nodard Island",
+    "cities": []
+  },
+  "azdhar": {
+    "name": "Azdhar Island",
+    "cities": [
+      "bhadh",
+      "oghon",
+      "zren_zru",
+      "quccazzaz",
+      "zu_ighal"
+    ]
+  }
+}
