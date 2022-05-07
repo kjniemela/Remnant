@@ -1,5 +1,22 @@
 //- helper functions
-- const capitalize = (str) => str[0].toUpperCase() + str.substr(1,str.length-1);
+include helpers.pug
+
+mixin mdTag(parent, tag)
+  if tag[0] === parent[0]
+    | #{tag[1]}
+    each subtag in tag[4]
+      +mdTag(tag, subtag)
+  else
+    #{tag[0]}( class=tag[2] href=tag[3] ) #{tag[1]}
+      each subtag in tag[4]
+        +mdTag(tag, subtag)
+
+mixin mdText(text)
+  each tag in parseMdText(text)
+    #{tag[0]}( class=tag[2] href=tag[3] ) #{tag[1]}
+      each subtag in tag[4]
+        +mdTag(tag, subtag)
+
 
 doctype html
 html(lang='en')

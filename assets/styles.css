@@ -112,7 +112,7 @@ hr {
   font-size: 14px;
   text-decoration: none;
   text-align: center;
-  background-image: url("/remnant/archive/book.jpg");
+  background-image: url("book.jpg");
   background-size: 100% auto;
   border: 2px outset gray;
   border-radius: 10px;
@@ -142,4 +142,9 @@ hr {
 .sllnk {
   color: black;
   text-decoration: none;
+}
+
+/* plain text */
+p {
+  font-size: 20px;
 }

@@ -1,0 +1,36 @@
+extends article.pug
+
+block moreBtns
+  a.btn(href='/remnant/atlas') Atlas
+  a.btn(href='/remnant/atlas/countries') Countries
+
+block image
+  .container( style={ width: '100%' } )
+    img( src=`/remnant/assets/countries/${pathName}.png` style={ width: '100%' } )
+
+block glassBox
+  +infoItem(
+    'Capital',
+    [cities[country.capital].name],
+    prefixItems(`/remnant/atlas/cities/`, [country.capital])
+  )
+  +infoItem(
+    'Languages',
+    country.languages.map(lang => languages[lang].name),
+    prefixItems(`/remnant/encyclopedia/languages/`, country.languages)
+  )
+  +infoItem(
+    'Cities',
+    country.cities.map(city => cities[city].name),
+    prefixItems(`/remnant/atlas/cities/`, country.cities)
+  )
+  +infoItem(
+    'Locations',
+    country.locations.map(location => locations[location].name),
+    prefixItems(`/remnant/atlas/countries/${pathName}/`, country.locations)
+  )
+  +infoItem(
+    'Islands',
+    country.islands.map(island => islands[island].name),
+    prefixItems('/remnant/atlas/islands/', country.islands)
+  )
