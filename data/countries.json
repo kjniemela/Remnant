@@ -1,6 +1,51 @@
 {
-  "brolzo": {},
-  "eskiholt": {},
-  "uyalon": {},
-  "hilwahr": {}
+  "brolzo": {
+    "name": "United Kingdoms of Brolzo",
+    "capital": "quccazzaz",
+    "languages": [
+      "brolzoni",
+      "orcish"
+    ],
+    "islands": [
+      "chiggegh",
+      "midh",
+      "didard",
+      "illgre",
+      "agkhor",
+      "kog",
+      "udh",
+      "verrog",
+      "nodard",
+      "azdhar"
+    ],
+    "locations": [
+      "shing_zhe"
+    ]
+  },
+  "eskiholt": {
+    "name": "Eskiholti Confederation",
+    "capital": "faxaoss",
+    "languages": [
+      "dwarvish",
+      "eskiholti",
+      "northern_sylvan",
+      "southern_sylvan"
+    ],
+    "islands": [],
+    "locations": []
+  },
+  "uyalon": {
+    "name": "The Kingdom of Uyalon",
+    "capital": "selasera",
+    "languages": [],
+    "islands": [],
+    "locations": []
+  },
+  "hilwahr": {
+    "name": "Hilwahr Commonwealth",
+    "capital": "dhularum",
+    "languages": [],
+    "islands": [],
+    "locations": []
+  }
 }

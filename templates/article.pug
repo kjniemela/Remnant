@@ -1,0 +1,25 @@
+extends layout.pug
+
+block buttons
+  a.btn(href='/remnant') Home
+  block moreBtns
+
+mixin infoItem(key, values, paths)
+  div
+    h3 #{key}
+    each val, index in values
+      a.sllnk( href=paths[index] ) #{val}
+
+block content
+  .containerCol
+    .container.header
+      h1 #{title}
+    .containerRow
+      .container( style={ width: '70%' } )
+        +mdText(desc)
+      .containerCol( style={ width: '40%' } )
+        block image
+        .container( style={ 'flex-grow': 1 } )
+          h1 About
+          .glassBox
+            block glassBox

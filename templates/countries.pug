@@ -1,0 +1,23 @@
+extends layout.pug
+
+
+block buttons
+  a.btn(href='/remnant') Home
+  a.btn(href='/remnant/atlas') Atlas
+
+mixin countryTitle(title)
+  li
+    h1
+      a.sllnk( href=`/remnant/atlas/countries/${title}` ) #{capitalize(title)}
+
+block content
+  .containerCol
+    .container.header
+      h1 Nations of the Remnants
+    .containerRow
+      .container( style={ 'flex-grow': 1 } )
+        ul
+          each val, key in countries
+            +countryTitle(key)
+      .container( style={ width: '40%' } )
+        img( src='/remnant/assets/factions.png' style={ width: '100%' } )

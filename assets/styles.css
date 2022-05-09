@@ -68,14 +68,26 @@ hr {
   padding: 5px 5%;
 }
 
-.containerGroup {
+.containerRow {
   display: flex;
   justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.containerCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
   width: 100%;
 }
 
 .container {
-  margin: 5px 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  /* margin: 5px; */
   padding: 20px 30px;
   background-image: url("paper_backg.jpg");
   border: 5px groove grey;
@@ -112,7 +124,7 @@ hr {
   font-size: 14px;
   text-decoration: none;
   text-align: center;
-  background-image: url("/remnant/archive/book.jpg");
+  background-image: url("book.jpg");
   background-size: 100% auto;
   border: 2px outset gray;
   border-radius: 10px;
@@ -138,8 +150,34 @@ hr {
   border-color: rgb(20, 20, 20);
 }
 
+/* unordered lists for link items */
+/* .itemList {
+  margin-bottom: 20px;
+} */
+
 /* list item/text links */
 .sllnk {
+  display: block;
   color: black;
   text-decoration: none;
+}
+
+/* "glassBox" div (for info sections) */
+.glassBox {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(236, 230, 184, 0.4);
+  padding: 15px;
+  border-radius: 15px;
+  gap: 20px;
+}
+
+/* plain text classes */
+.text {
+  font-size: 20px;
+  text-indent: 40px;
+}
+
+.small {
+  font-size: 16px;
 }

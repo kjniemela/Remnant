@@ -1,0 +1,18 @@
+extends article.pug
+
+block moreBtns
+  a.btn(href='/remnant/atlas') Atlas
+  a.btn(href='/remnant/atlas/countries') Countries
+  if location.country
+    a.btn(href=`/remnant/atlas/countries/${location.country}`) #{capitalize(location.country)}
+
+//- block image
+//-   .container( style={ width: '100%' } )
+//-     img( src=`/remnant/assets/locations/${pathName}.png` style={ width: '100%' } )
+
+block glassBox
+  +infoItem(
+    'Country',
+    [location.country ? countries[location.country].name : 'Unknown'],
+    [location.country && `/remnant/atlas/countries/${location.country}`]
+  )
