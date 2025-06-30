@@ -37,7 +37,11 @@
   "uyalon": {
     "name": "The Kingdom of Uyalon",
     "capital": "selasera",
-    "languages": [],
+    "languages": [
+      "elvish",
+      "old_common",
+      "western_dwarvish"
+    ],
     "islands": [],
     "locations": []
   },

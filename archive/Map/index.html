@@ -46,6 +46,58 @@ var cityImg = null;
 var factionsImg = null;
 var gridImg = null;
 
+var pinMode = 'path'
+var path = [];
+
+const SCALE = 14 / distance(497, -186, 511, -215);
+
+var journeys = {
+	// Nijem and Cas
+	'nijem1': [632, 29, null, '#6fb750'],
+	'nijem2': [639, 40, 'nijem1', '#6fb750'],
+	'nijem3': [629, 50, 'nijem2', '#6fb750'],
+	'nijem4': [627, 61, 'nijem2', '#6fb750'],
+	'nijem5': [589, 76, 'nijem4', '#6fb750'],
+	'nijem6': [639, 40, 'nijem5', '#6fb750'],
+	'nijem7': [563.5, -88, 'nijem6', '#6fb750'],
+	'nijem8': [546.5, -194, 'nijem7', '#6fb750'],
+	'nijem9': [534, -206, 'nijem8', '#6fb750'],
+	'nijem10': [510, -204, 'nijem9', '#6fb750'],
+	'nijem11': [545, -370, 'nijem9', '#6fb750'],
+	'nijem12': [490, -436, 'nijem11', '#6fb750'],
+	'nijem13': [441, -448, 'nijem12', '#6fb750'],
+	'nijem14': [487, -430, 'nijem13', '#6fb750'],
+	'nijem15': [515, -390, 'nijem14', '#6fb750'],
+	'nijem16': [500, -218, 'nijem15', '#6fb750'],
+
+	// Renegades
+	'renegades1': [633, 29, null, '#9a779f', 'Battle with the Morgunstjarna'],
+	'renegades2': [640, 40, 'renegades1', '#9a779f'],
+	'renegades3': [630, 50, 'renegades2', '#9a779f', 'The Hut'],
+	'renegades4': [627, 62, 'renegades3', '#9a779f'],
+	'renegades5': [589, 77, 'renegades4', '#9a779f'],
+	'renegades6': [527, -135, 'renegades5', '#9a779f'],
+	'renegades7': [500, -172, 'renegades6', '#9a779f'],
+	'renegades8': [495, -181, 'renegades7', '#9a779f'],
+	'renegades9': [499, -190, 'renegades8', '#9a779f'],
+	
+	// Owen breaks off with Helio
+	'mex1': [496, -181, 'renegades8', '#fce5cd'],
+	'mex2': [501, -172, 'mex1', '#fce5cd'],
+	'mex3': [528, -135, 'mex2', '#fce5cd'],
+	'mex4': [564, -88, 'mex3', '#fce5cd', 'Midnight Excursion'],
+	'mex5': [547, -194, 'mex4', '#fce5cd'],
+	'mex6': [534, -204, 'mex5', '#fce5cd'],
+	'mex7': [510, -202, 'mex6', '#fce5cd'],
+
+	// Continues after standoff
+	'renegades10': [510, -203, 'renegades9', '#9a779f', 'Standoff'],
+	'renegades11': [534, -205, 'renegades10', '#9a779f'],
+	'renegades12': [528, -363, 'renegades11', '#9a779f'],
+	'renegades13': [486, -425, 'renegades12', '#9a779f'],
+	'renegades14': [441, -443, 'renegades13', '#9a779f'],
+};
+
 /* NAME  X  Y  SIZE COUNTRY */
 var cities = {
 	"Thalgur": [-246, -146, 7, "Hilwahr"],
@@ -53,6 +105,9 @@ var cities = {
 	"Dhularum": [-2, 5.5, 36, "Hilwahr"],
 	"Nir Dor": [89.1, -66.6, 10, "Hilwahr"],
 	"Nar Badhir": [640, 57, 12, "Hilwahr"],
+
+
+
 	"Didard": [-90, 187, 3, "Brolzo"],
 	"Chiggegh": [494.8, -182.7, 12, "Brolzo"],
 	"Quadgon": [475.5, -393.1, 9, "Brolzo"],
@@ -67,6 +122,11 @@ var cities = {
 	"Zu Ighal": [168.9, -752.7, 17, "Brolzo"],
 	"Edbrikh": [-4.5, -533.1, 16, "Brolzo"],
 	"Nidvagg": [-71.7, -617, 17, "Brolzo"],
+
+	"Armahl Zol": [400, -666, 2, "Brolzo"],
+
+
+
 	"Afme Taesi": [130.5, -935, 16, "Uyalon"],
 	"Ayfrion": [97.2, -987.1, 13, "Uyalon"],
 	"Kilanor": [46.9, -1013.3, 14, "Uyalon"],
@@ -85,6 +145,9 @@ var cities = {
 	"Lilsa": [-200, -932.5, 10, "Uyalon"],
 	"Sheo Caelora": [70, -1266.6, 8, "Uyalon"],
 	"Lafe Alhora": [-298.7, -1380.9, 9, "Uyalon"],
+
+
+
 	"Borgarsandr": [819, -538.7, 19, "Eskiholt"],
 	"Basvik": [587.6, -691.4, 18, "Eskiholt"],
 	"Faxaoss": [729.7, -647.1, 10, "Eskiholt"],
@@ -159,6 +222,24 @@ canvas.onmousedown = function(evt) {
 canvas.onmouseup = function(evt) {
 	var mousePos = getMousePos(canvas, evt);
 	mouseDown = false;
+	if (x === oldX && y === oldY) {
+		if (pinMode === 'path') {
+			let pinExisted = false;
+			for (let i = 0; i < path.length; i++) {
+				const pin = path[i];
+				if (distance(Math.round(selX), Math.round(selY), ...pin) < 2.1) {
+					path.splice(i, 1);
+					pinExisted = true;
+					update();
+					break;
+				}
+			}
+			if (!pinExisted) {
+				path.push([Math.round(selX), Math.round(selY)])
+				update();
+			}
+		}
+	}
 	oldX = x;
 	oldY = y;
 }
@@ -244,17 +325,37 @@ function draw(x, y, size) {
 	ctx.translate(c.width/2, c.height/2);
 	ctx.scale(size, size);
 	//drawPoint(ctx, 0, 0, x, y, "none");
-   	ctx.drawImage(mapImg, 0-x-(1024), 0+y-(768));
-   	if (showborders) {
-   		ctx.drawImage(factionsImg, 0-x-(1024), 0+y-(768));
-   	}
-   	if (showgrid) {
-   		ctx.drawImage(gridImg, 0-x-(1024), 0+y-(768));
-   	}
+	ctx.drawImage(mapImg, 0-x-(1024), 0+y-(768));
+	if (showborders) {
+		ctx.drawImage(factionsImg, 0-x-(1024), 0+y-(768));
+	}
+	if (showgrid) {
+		ctx.drawImage(gridImg, 0-x-(1024), 0+y-(768));
+	}
 
-   	for (i in cities) {
-   		city = cities[i];
-   		var grd = ctx.createRadialGradient(city[0]-x, -city[1]+y, city[2]/3, city[0]-x, -city[1]+y, city[2]-1);
+	for (const key in journeys) {
+		const point = journeys[key];
+		if (point[2]) {
+			ctx.fillStyle = point[3];
+			ctx.strokeStyle = point[3];
+			const lastPoint = journeys[point[2]];
+			ctx.beginPath();
+			ctx.moveTo(lastPoint[0]-x, -lastPoint[1]+y);
+			ctx.lineTo(point[0]-x, -point[1]+y);
+			ctx.stroke();
+		}
+
+		if (point[4]) {
+			ctx.fillStyle = point[3];
+			ctx.beginPath();
+			ctx.arc(point[0]-x, -point[1]+y, 2, 0, 2 * Math.PI);
+			ctx.fill();
+		}
+	}
+
+	for (i in cities) {
+		city = cities[i];
+		var grd = ctx.createRadialGradient(city[0]-x, -city[1]+y, city[2]/3, city[0]-x, -city[1]+y, city[2]-1);
 		grd.addColorStop(0, "rgba(0, 0, 255, 1)");
 		grd.addColorStop(1, "rgba(0, 0, 255, 0)");
    		ctx.fillStyle = grd;
@@ -316,6 +417,43 @@ function draw(x, y, size) {
 	   	ctx.fillText(i, ship[0]-x-(ctx.measureText(i).width/2)+(0.03*ship[2]), -ship[1]+y-(4.06*ym));
 		ctx.fillStyle = "#000000";
 	   	ctx.fillText(i, ship[0]-x-(ctx.measureText(i).width/2), -ship[1]+y-(4*ym));
+	}
+
+	ctx.globalAlpha = 1;
+	let lastPin;
+	let pathLength = 0;
+	for (const pin of path) {
+		pathLength += distance(...pin, ...(lastPin || pin))
+		if (lastPin) {
+			ctx.beginPath();
+			ctx.moveTo(lastPin[0]-x, -lastPin[1]+y);
+			ctx.lineTo(pin[0]-x, -pin[1]+y);
+			ctx.stroke();
+		}
+		
+		ctx.fillStyle = "#0AAA01";
+		ctx.beginPath();
+		ctx.arc(pin[0]-x, -pin[1]+y, 2, 0, 2 * Math.PI);
+		ctx.fill();
+
+		lastPin = pin
+
+		ctx.font = "3px devinneSwash";
+		ctx.fillStyle = "#000000";
+		const lengthText = (pathLength * SCALE).toFixed(2) + ' miles';
+	  ctx.fillText(lengthText, pin[0]-x-(ctx.measureText(lengthText).width/2), -pin[1]+y-(4*ym));
+	}
+
+	ctx.globalAlpha = 1;
+
+	for (const key in journeys) {
+		const point = journeys[key];
+
+		if (point[4]) {
+			ctx.font = "3px devinneSwash";
+			ctx.fillStyle = "#000000";
+			ctx.fillText(point[4], point[0]-x-(ctx.measureText(point[4]).width/2), -point[1]+y-(4));
+		}
 	}
 
 	ctx.fillStyle = "#000000";
